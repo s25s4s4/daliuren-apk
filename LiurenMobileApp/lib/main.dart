@@ -48,6 +48,9 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
   // 标签页控制器 - 8个标签页
   late TabController _tabController;
 
+  // 分析数据存储
+  Map<String, dynamic> _analysisData = {};
+
   @override
   void initState() {
     super.initState();
@@ -409,16 +412,21 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '天盘：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('子 丑 寅 卯 辰 巳 午 未 申 酉 戌 亥'),
-                        Text('天乙 太乙 青龙 六合 勾陈 朱雀 腾蛇 太常 白虎 玄武 太阴 天后'),
+                        const SizedBox(height: 8),
+                        const Text('子 丑 寅 卯 辰 巳 午 未 申 酉 戌 亥'),
+                        const Text('天乙 太乙 青龙 六合 勾陈 朱雀 腾蛇 太常 白虎 玄武 太阴 天后'),
+                        const SizedBox(height: 8),
+                        Text(
+                          _analysisData['tianpan'] ?? '请先进行智能分析',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                        ),
                       ],
                     ),
                   ),
@@ -432,16 +440,21 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '地盘：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('子 丑 寅 卯 辰 巳 午 未 申 酉 戌 亥'),
-                        Text('天乙 太乙 青龙 六合 勾陈 朱雀 腾蛇 太常 白虎 玄武 太阴 天后'),
+                        const SizedBox(height: 8),
+                        const Text('子 丑 寅 卯 辰 巳 午 未 申 酉 戌 亥'),
+                        const Text('天乙 太乙 青龙 六合 勾陈 朱雀 腾蛇 太常 白虎 玄武 太阴 天后'),
+                        const SizedBox(height: 8),
+                        Text(
+                          _analysisData['dipan'] ?? '请先进行智能分析',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                        ),
                       ],
                     ),
                   ),
@@ -455,16 +468,21 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '人盘：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('子 丑 寅 卯 辰 巳 午 未 申 酉 戌 亥'),
-                        Text('天乙 太乙 青龙 六合 勾陈 朱雀 腾蛇 太常 白虎 玄武 太阴 天后'),
+                        const SizedBox(height: 8),
+                        const Text('子 丑 寅 卯 辰 巳 午 未 申 酉 戌 亥'),
+                        const Text('天乙 太乙 青龙 六合 勾陈 朱雀 腾蛇 太常 白虎 玄武 太阴 天后'),
+                        const SizedBox(height: 8),
+                        Text(
+                          _analysisData['renpan'] ?? '请先进行智能分析',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                        ),
                       ],
                     ),
                   ),
@@ -548,18 +566,23 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.green.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '天盘分析：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 天盘主外，代表外在环境'),
-                        Text('• 天盘主阳，代表阳性力量'),
-                        Text('• 天盘主动，代表变化趋势'),
-                        Text('• 天盘主上，代表上层关系'),
+                        const SizedBox(height: 8),
+                        const Text('• 天盘主外，代表外在环境'),
+                        const Text('• 天盘主阳，代表阳性力量'),
+                        const Text('• 天盘主动，代表变化趋势'),
+                        const Text('• 天盘主上，代表上层关系'),
+                        const SizedBox(height: 8),
+                        Text(
+                          _analysisData['tianpan_analysis'] ?? '请先进行智能分析',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                        ),
                       ],
                     ),
                   ),
@@ -573,18 +596,23 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.green.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '地盘分析：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 地盘主内，代表内在环境'),
-                        Text('• 地盘主阴，代表阴性力量'),
-                        Text('• 地盘主静，代表稳定基础'),
-                        Text('• 地盘主下，代表下层关系'),
+                        const SizedBox(height: 8),
+                        const Text('• 地盘主内，代表内在环境'),
+                        const Text('• 地盘主阴，代表阴性力量'),
+                        const Text('• 地盘主静，代表稳定基础'),
+                        const Text('• 地盘主下，代表下层关系'),
+                        const SizedBox(height: 8),
+                        Text(
+                          _analysisData['dipan_analysis'] ?? '请先进行智能分析',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                        ),
                       ],
                     ),
                   ),
@@ -668,18 +696,18 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.orange.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '贵人：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 天乙贵人：主贵人相助，事业有成'),
-                        Text('• 文昌贵人：主学业进步，知识增长'),
-                        Text('• 天德贵人：主道德高尚，受人尊敬'),
-                        Text('• 月德贵人：主心地善良，福报深厚'),
+                        const SizedBox(height: 8),
+                        Text('• 天乙贵人：${_analysisData['tianyi_guiren'] ?? '请先进行智能分析'}'),
+                        Text('• 文昌贵人：${_analysisData['wenchang_guiren'] ?? '请先进行智能分析'}'),
+                        Text('• 天德贵人：${_analysisData['tiande_guiren'] ?? '请先进行智能分析'}'),
+                        Text('• 月德贵人：${_analysisData['yuede_guiren'] ?? '请先进行智能分析'}'),
                       ],
                     ),
                   ),
@@ -693,18 +721,18 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.orange.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '神煞：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 青龙：主贵人相助，事业有成'),
-                        Text('• 白虎：主威严，但需注意冲突'),
-                        Text('• 朱雀：主口舌，需注意言语'),
-                        Text('• 玄武：主智慧，但需注意小人'),
+                        const SizedBox(height: 8),
+                        Text('• 青龙：${_analysisData['qinglong'] ?? '请先进行智能分析'}'),
+                        Text('• 白虎：${_analysisData['baihu'] ?? '请先进行智能分析'}'),
+                        Text('• 朱雀：${_analysisData['zhuque'] ?? '请先进行智能分析'}'),
+                        Text('• 玄武：${_analysisData['xuanwu'] ?? '请先进行智能分析'}'),
                       ],
                     ),
                   ),
@@ -788,28 +816,23 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.brown.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '《大六壬神课金口诀》：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 大六壬者，以天干地支为纲，以神煞为目'),
-                        Text('• 天盘主外，地盘主内，人盘主中'),
-                        Text('• 神煞者，吉凶之象也'),
-                        Text('• 贵人者，相助之神也'),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 8),
+                        const Text('• 大六壬者，以天干地支为纲，以神煞为目'),
+                        const Text('• 天盘主外，地盘主内，人盘主中'),
+                        const Text('• 神煞者，吉凶之象也'),
+                        const Text('• 贵人者，相助之神也'),
+                        const SizedBox(height: 12),
                         Text(
-                          '《大六壬大全》：',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          _analysisData['classical_interpretation'] ?? '请先进行智能分析',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.brown),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 大六壬者，以天干地支为纲，以神煞为目'),
-                        Text('• 天盘主外，地盘主内，人盘主中'),
-                        Text('• 神煞者，吉凶之象也'),
-                        Text('• 贵人者，相助之神也'),
                       ],
                     ),
                   ),
@@ -893,28 +916,23 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.teal.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '现代大六壬理论：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 基于传统理论，结合现代科学'),
-                        Text('• 运用概率论和统计学方法'),
-                        Text('• 结合心理学和行为学理论'),
-                        Text('• 运用大数据和人工智能技术'),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 8),
+                        const Text('• 基于传统理论，结合现代科学'),
+                        const Text('• 运用概率论和统计学方法'),
+                        const Text('• 结合心理学和行为学理论'),
+                        const Text('• 运用大数据和人工智能技术'),
+                        const SizedBox(height: 12),
                         Text(
-                          '现代分析方法：',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          _analysisData['modern_theory'] ?? '请先进行智能分析',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.teal),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 数据挖掘和模式识别'),
-                        Text('• 机器学习和深度学习'),
-                        Text('• 自然语言处理技术'),
-                        Text('• 知识图谱和推理引擎'),
                       ],
                     ),
                   ),
@@ -998,28 +1016,23 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                       color: Colors.purple.shade50,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'AI分析功能：',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 智能排盘：自动生成大六壬排盘'),
-                        Text('• 智能分析：基于AI算法分析结果'),
-                        Text('• 智能推荐：推荐最佳解决方案'),
-                        Text('• 智能预测：预测未来发展趋势'),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 8),
+                        const Text('• 智能排盘：自动生成大六壬排盘'),
+                        const Text('• 智能分析：基于AI算法分析结果'),
+                        const Text('• 智能推荐：推荐最佳解决方案'),
+                        const Text('• 智能预测：预测未来发展趋势'),
+                        const SizedBox(height: 12),
                         Text(
-                          'AI技术特点：',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          _analysisData['ai_analysis'] ?? '请先进行智能分析',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),
                         ),
-                        SizedBox(height: 8),
-                        Text('• 深度学习：模拟人脑思维过程'),
-                        Text('• 自然语言处理：理解用户问题'),
-                        Text('• 知识图谱：构建专业知识网络'),
-                        Text('• 推理引擎：进行逻辑推理分析'),
                       ],
                     ),
                   ),
@@ -1123,6 +1136,11 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
                         const Text('• 感情案例：2500个'),
                         const Text('• 财运案例：2500个'),
                         const Text('• 健康案例：2500个'),
+                        const SizedBox(height: 12),
+                        Text(
+                          _analysisData['case_analysis'] ?? '请先进行智能分析',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
                       ],
                     ),
                   ),
@@ -1181,12 +1199,37 @@ class _LiurenHomePageState extends State<LiurenHomePage> with TickerProviderStat
       setState(() {
         _isAnalyzing = false;
         _analysisResult = _generateAnalysis();
+        _generateAnalysisData();
       });
     });
   }
 
-  String _generateAnalysis() {
+  void _generateAnalysisData() {
     final random = Random();
+    
+    // 生成分析数据
+    _analysisData = {
+      'tianpan': _getRandomPlate(),
+      'dipan': _getRandomPlate(),
+      'renpan': _getRandomPlate(),
+      'tianpan_analysis': _getRandomPlate(),
+      'dipan_analysis': _getRandomPlate(),
+      'tianyi_guiren': _getRandomDeity(),
+      'wenchang_guiren': _getRandomDeity(),
+      'tiande_guiren': _getRandomDeity(),
+      'yuede_guiren': _getRandomDeity(),
+      'qinglong': _getRandomDeity(),
+      'baihu': _getRandomDeity(),
+      'zhuque': _getRandomDeity(),
+      'xuanwu': _getRandomDeity(),
+      'classical_interpretation': _getRandomAdvice(),
+      'modern_theory': _getRandomAdvice(),
+      'ai_analysis': _getRandomAdvice(),
+      'case_analysis': _getRandomAdvice(),
+    };
+  }
+
+  String _generateAnalysis() {
     final List<String> results = [
       '🎉 大六壬排盘分析完成！',
       '',
