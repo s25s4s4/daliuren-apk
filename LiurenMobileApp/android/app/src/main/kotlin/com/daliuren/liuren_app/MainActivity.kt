@@ -1,4 +1,4 @@
-package com.example.liuren_app
+package com.daliuren.liuren_app
 
 import io.flutter.embedding.android.FlutterActivity
 

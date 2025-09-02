@@ -8,7 +8,7 @@
 PRODUCT_NAME = liuren_app
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.liurenApp
+PRODUCT_BUNDLE_IDENTIFIER = com.daliuren.liurenApp
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2025 com.daliuren. All rights reserved.
