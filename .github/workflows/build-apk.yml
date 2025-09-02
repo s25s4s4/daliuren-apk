@@ -31,32 +31,8 @@ jobs:
         cd LiurenMobileApp
         flutter build apk --release
         
-    - name: 上传APK到Release
+    - name: 上传APK到Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: 大六壬排盘解析系统-APK
         path: LiurenMobileApp/build/app/outputs/flutter-apk/app-release.apk
-        
-    - name: 创建Release
-      if: github.ref == 'refs/heads/master'
-      uses: softprops/action-gh-release@v1
-      with:
-        name: 大六壬排盘解析系统 v1.0.0
-        tag_name: v1.0.0
-        files: LiurenMobileApp/build/app/outputs/flutter-apk/app-release.apk
-        body: |
-          ?? 大六壬排盘解析系统APK构建完成！
-          
-          ## 功能特点
-          - ?? 完整的手机APP
-          - ?? 大六壬排盘解析
-          - ?? AI智能分析
-          - ?? 100万案例数据库
-          - ?? 离线使用
-          
-          ## 安装说明
-          1. 下载APK文件
-          2. 在Android手机上安装
-          3. 享受完整功能！
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
