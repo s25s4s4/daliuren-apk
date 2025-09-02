@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大六壬排盘解析系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .input-section h3 {
+            color: #34495e;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-calculate {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .result-section {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        .result-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .nav-tabs {
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 10px 10px 0 0;
+            margin-right: 5px;
+            padding: 12px 20px;
+            color: #6c757d;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+        }
+        .tab-content {
+            padding: 20px 0;
+        }
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .info-card h5 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #34495e;
+        }
+        .info-value {
+            color: #667eea;
+            font-weight: 500;
+        }
+        .success-message {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .error-message {
+            background: linear-gradient(45deg, #dc3545, #e74c3c);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        .tian-di-pan {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .pan-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .pan-position {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .pan-position.tian {
+            border-color: #007bff;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+        
+        .pan-position.di {
+            border-color: #28a745;
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+        }
+        
+        .pan-position.clickable {
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .pan-position.clickable:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-color: #ffc107;
+        }
+        
+        .pan-position.clickable:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* 天地盘分析模态框样式 */
+        .analysis-content h6 {
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .analysis-content p {
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: #495057;
+        }
+        
+        .analysis-content strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .position-info {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .element-analysis {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .position-analysis {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .interaction-analysis {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .practical-advice {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #dc3545;
+        }
+        .shen-sha-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .shen-sha-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .shen-sha-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .shen-sha-value {
+            color: #667eea;
+        }
+        
+        /* 六壬盘面样式 */
+        .liu-ren-pan-display {
+            font-family: 'SimSun', serif;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        .pan-left, .pan-right {
+            text-align: center;
+        }
+        
+        .pan-row {
+            margin: 2px 0;
+            padding: 2px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .pan-row:last-child {
+            border-bottom: none;
+        }
+        
+        .text-danger {
+            color: #dc3545 !important;
+            font-weight: bold;
+        }
+        
+        .shen-sha-meaning {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container main-container">
+        <div class="header">
+            <h1><i class="fas fa-yin-yang"></i> 大六壬排盘解析系统</h1>
+            <p>结合古籍内容和现代理论，提供专业的大六壬排盘服务</p>
+        </div>
+
+        <div class="input-section">
+            <h3><i class="fas fa-comments"></i> 请输入您的问题</h3>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label for="userQuestion" class="form-label">您想咨询什么事情？</label>
+                    <textarea class="form-control" id="userQuestion" rows="3" 
+                              placeholder="例如：我什么时候能升职？我的婚姻如何？我适合投资股票吗？我的健康状况怎么样？...&#10;&#10;您可以详细描述您关心的问题，系统会智能分析并提供针对性的解答。"></textarea>
+                    <div class="form-text">
+                        <i class="fas fa-lightbulb"></i> 
+                        <strong>智能提示：</strong>系统会根据您的问题自动识别类型（工作、感情、财运、健康等），并提供个性化分析结果
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label class="form-label">快速选择常见问题</label>
+                    <div class="btn-group-wrapper">
+                        <div class="btn-group me-2 mb-2" role="group">
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickQuestion('工作')">
+                                <i class="fas fa-briefcase"></i> 工作事业
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="setQuickQuestion('感情')">
+                                <i class="fas fa-heart"></i> 感情婚姻
+                            </button>
+                            <button type="button" class="btn btn-outline-success btn-sm" onclick="setQuickQuestion('财运')">
+                                <i class="fas fa-coins"></i> 财运投资
+                            </button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" onclick="setQuickQuestion('健康')">
+                                <i class="fas fa-heartbeat"></i> 健康养生
+                            </button>
+                        </div>
+                        <div class="btn-group me-2 mb-2" role="group">
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="setQuickQuestion('学业')">
+                                <i class="fas fa-graduation-cap"></i> 学业考试
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setQuickQuestion('出行')">
+                                <i class="fas fa-plane"></i> 出行旅游
+                            </button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" onclick="setQuickQuestion('家庭')">
+                                <i class="fas fa-home"></i> 家庭子女
+                            </button>
+                            <button type="button" class="btn btn-outline-purple btn-sm" onclick="setQuickQuestion('综合')">
+                                <i class="fas fa-star"></i> 综合运势
+                            </button>
+                        </div>
+                        <div class="btn-group me-2 mb-2" role="group">
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickQuestion('升职')">
+                                <i class="fas fa-arrow-up"></i> 升职加薪
+                            </button>
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="setQuickQuestion('跳槽')">
+                                <i class="fas fa-exchange-alt"></i> 跳槽换工作
+                            </button>
+                            <button type="button" class="btn btn-outline-success btn-sm" onclick="setQuickQuestion('创业')">
+                                <i class="fas fa-rocket"></i> 创业经商
+                            </button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" onclick="setQuickQuestion('投资')">
+                                <i class="fas fa-chart-line"></i> 投资理财
+                            </button>
+                        </div>
+                        <div class="btn-group me-2 mb-2" role="group">
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="setQuickQuestion('恋爱')">
+                                <i class="fas fa-kiss"></i> 恋爱脱单
+                            </button>
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="setQuickQuestion('结婚')">
+                                <i class="fas fa-ring"></i> 结婚时机
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setQuickQuestion('官司')">
+                                <i class="fas fa-gavel"></i> 官司诉讼
+                            </button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" onclick="setQuickQuestion('房产')">
+                                <i class="fas fa-building"></i> 房地产
+                            </button>
+                        </div>
+                        <div class="btn-group me-2 mb-2" role="group">
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickQuestion('高考')">
+                                <i class="fas fa-university"></i> 高考考研
+                            </button>
+                            <button type="button" class="btn btn-outline-success btn-sm" onclick="setQuickQuestion('证书')">
+                                <i class="fas fa-certificate"></i> 证书考试
+                            </button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" onclick="setQuickQuestion('公务员')">
+                                <i class="fas fa-user-tie"></i> 公务员考试
+                            </button>
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="setQuickQuestion('人际关系')">
+                                <i class="fas fa-users"></i> 人际关系
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-user"></i> 求测人信息</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="userYear" class="form-label">出生年份</label>
+                    <input type="number" class="form-control" id="userYear" value="1990" min="1900" max="2100">
+                </div>
+                <div class="col-md-3">
+                    <label for="userMonth" class="form-label">出生月份</label>
+                    <input type="number" class="form-control" id="userMonth" value="1" min="1" max="12">
+                </div>
+                <div class="col-md-3">
+                    <label for="userDay" class="form-label">出生日期</label>
+                    <input type="number" class="form-control" id="userDay" value="1" min="1" max="31">
+                </div>
+                <div class="col-md-3">
+                    <label for="userHour" class="form-label">出生时辰</label>
+                    <select class="form-control" id="userHour">
+                        <option value="0">子时 (23:00-01:00)</option>
+                        <option value="2">丑时 (01:00-03:00)</option>
+                        <option value="4">寅时 (03:00-05:00)</option>
+                        <option value="6">卯时 (05:00-07:00)</option>
+                        <option value="8">辰时 (07:00-09:00)</option>
+                        <option value="10">巳时 (09:00-11:00)</option>
+                        <option value="12">午时 (11:00-13:00)</option>
+                        <option value="14">未时 (13:00-15:00)</option>
+                        <option value="16">申时 (15:00-17:00)</option>
+                        <option value="18">酉时 (17:00-19:00)</option>
+                        <option value="20">戌时 (19:00-21:00)</option>
+                        <option value="22">亥时 (21:00-23:00)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-clock"></i> 求测时间</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <label for="year" class="form-label">年份</label>
+                    <input type="number" class="form-control" id="year" value="2025" min="1900" max="2100">
+                </div>
+                <div class="col-md-2">
+                    <label for="month" class="form-label">月份</label>
+                    <input type="number" class="form-control" id="month" value="1" min="1" max="12">
+                </div>
+                <div class="col-md-2">
+                    <label for="day" class="form-label">日期</label>
+                    <input type="number" class="form-control" id="day" value="1" min="1" max="31">
+                </div>
+                <div class="col-md-2">
+                    <label for="hour" class="form-label">小时</label>
+                    <input type="number" class="form-control" id="hour" value="12" min="0" max="23">
+                </div>
+                <div class="col-md-2">
+                    <label for="minute" class="form-label">分钟</label>
+                    <input type="number" class="form-control" id="minute" value="0" min="0" max="59">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-calculate w-100" onclick="calculatePan()">
+                        <i class="fas fa-magic"></i> 智能分析
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setCurrentTime()">
+                        <i class="fas fa-clock"></i> 使用当前时间
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="message"></div>
+
+        <div id="result-section" class="result-section" style="display: none;">
+            <h3><i class="fas fa-chart-line"></i> 排盘结果与解析</h3>
+            
+            <ul class="nav nav-tabs" id="resultTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="smart-analysis-tab" data-bs-toggle="tab" data-bs-target="#smart-analysis" type="button" role="tab">
+                        <i class="fas fa-brain"></i> 智能分析
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab">基础排盘</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tian-di-tab" data-bs-toggle="tab" data-bs-target="#tian-di" type="button" role="tab">天地盘</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shen-sha-tab" data-bs-toggle="tab" data-bs-target="#shen-sha" type="button" role="tab">神煞贵人</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="classics-tab" data-bs-toggle="tab" data-bs-target="#classics" type="button" role="tab">古籍解析</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="modern-tab" data-bs-toggle="tab" data-bs-target="#modern" type="button" role="tab">现代理论</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai-analysis" type="button" role="tab">
+                        <i class="fas fa-robot"></i> AI分析
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="case-tab" data-bs-toggle="tab" data-bs-target="#case-analysis" type="button" role="tab">
+                        <i class="fas fa-database"></i> 案例分析
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="comprehensive-tab" data-bs-toggle="tab" data-bs-target="#comprehensive" type="button" role="tab">综合分析</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="guidance-tab" data-bs-toggle="tab" data-bs-target="#guidance" type="button" role="tab">指导建议</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="resultTabContent">
+                <!-- 智能分析 -->
+                <div class="tab-pane fade show active" id="smart-analysis" role="tabpanel">
+                    <div id="smart-analysis-content" class="info-card">
+                        <h5><i class="fas fa-brain"></i> 智能分析结果</h5>
+                        <div id="event-recognition" class="mb-4">
+                            <h6><i class="fas fa-search"></i> 事件识别</h6>
+                            <div id="event-info" class="analysis-content"></div>
+                        </div>
+                        <div id="targeted-analysis" class="mb-4">
+                            <h6><i class="fas fa-target"></i> 针对性分析</h6>
+                            <div id="targeted-content" class="analysis-content"></div>
+                        </div>
+                        <div id="specific-predictions" class="mb-4">
+                            <h6><i class="fas fa-crystal-ball"></i> 具体预测</h6>
+                            <div id="predictions-content" class="analysis-content"></div>
+                        </div>
+                        <div id="actionable-advice" class="mb-4">
+                            <h6><i class="fas fa-lightbulb"></i> 行动建议</h6>
+                            <div id="advice-content" class="analysis-content"></div>
+                        </div>
+                        <div id="confidence-indicator" class="mb-4">
+                            <h6><i class="fas fa-chart-line"></i> 分析置信度</h6>
+                            <div id="confidence-content" class="analysis-content"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 基础排盘 -->
+                <div class="tab-pane fade" id="basic" role="tabpanel">
+                    <div class="info-card">
+                        <h5><i class="fas fa-star"></i> 基础排盘信息</h5>
+                        <div id="basic-elements"></div>
+                        <div id="liu-ren-pan"></div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary">四课</h6>
+                                <div id="si-ke"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary">三传</h6>
+                                <div id="san-chuan"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 天地盘 -->
+                <div class="tab-pane fade" id="tian-di" role="tabpanel">
+                    <div class="tian-di-pan">
+                        <h5><i class="fas fa-globe"></i> 天地盘结构</h5>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> 
+                            <strong>交互式分析：</strong>点击天盘或地盘的任意位置，即可查看该位置的详细分析，包括元素特性、位置含义、与其他要素的关系以及实践建议。
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary">天盘（以月将为起点）</h6>
+                                <div id="tian-pan" class="pan-grid"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary">地盘（固定位置）</h6>
+                                <div id="di-pan" class="pan-grid"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 神煞贵人 -->
+                <div class="tab-pane fade" id="shen-sha" role="tabpanel">
+                    <div class="info-card">
+                        <h5><i class="fas fa-shield-alt"></i> 神煞信息</h5>
+                        <div id="shen-sha-info" class="shen-sha-grid"></div>
+                    </div>
+                    <div class="info-card">
+                        <h5><i class="fas fa-crown"></i> 贵人信息</h5>
+                        <div id="gui-ren-info"></div>
+                    </div>
+                    <div class="info-card">
+                        <h5><i class="fas fa-horse"></i> 驿马空亡</h5>
+                        <div id="yi-ma-kong-wang"></div>
+                    </div>
+                </div>
+
+                <!-- 古籍解析 -->
+                <div class="tab-pane fade" id="classics" role="tabpanel">
+                    <div id="classics-content">
+                        <div class="loading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">加载中...</span>
+                            </div>
+                            <p class="mt-3">正在加载古籍内容...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 现代理论 -->
+                <div class="tab-pane fade" id="modern" role="tabpanel">
+                    <div id="modern-content">
+                        <div class="loading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">加载中...</span>
+                            </div>
+                            <p class="mt-3">正在加载现代理论...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 综合分析 -->
+                <div class="tab-pane fade" id="comprehensive" role="tabpanel">
+                    <div id="comprehensive-content">
+                        <div class="loading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">加载中...</span>
+                            </div>
+                            <p class="mt-3">正在进行分析...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI智能分析 -->
+                <div class="tab-pane fade" id="ai-analysis" role="tabpanel">
+                    <div id="ai-analysis-content" class="info-card">
+                        <h5><i class="fas fa-robot"></i> AI智能分析结果</h5>
+                        <div id="ai-pattern-analysis" class="mb-4">
+                            <h6><i class="fas fa-chart-bar"></i> 模式识别分析</h6>
+                            <div id="ai-patterns" class="analysis-content"></div>
+                        </div>
+                        <div id="ai-prediction" class="mb-4">
+                            <h6><i class="fas fa-crystal-ball"></i> AI预测结果</h6>
+                            <div id="ai-prediction-content" class="analysis-content"></div>
+                        </div>
+                        <div id="ai-risk-assessment" class="mb-4">
+                            <h6><i class="fas fa-exclamation-triangle"></i> 智能风险评估</h6>
+                            <div id="ai-risk-content" class="analysis-content"></div>
+                        </div>
+                        <div id="ai-success-probability" class="mb-4">
+                            <h6><i class="fas fa-percentage"></i> 成功概率分析</h6>
+                            <div id="ai-success-content" class="analysis-content"></div>
+                        </div>
+                        <div id="ai-recommendations" class="mb-4">
+                            <h6><i class="fas fa-lightbulb"></i> 智能建议</h6>
+                            <div id="ai-rec-content" class="analysis-content"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 案例分析 -->
+                <div class="tab-pane fade" id="case-analysis" role="tabpanel">
+                    <div id="case-analysis-content" class="info-card">
+                        <h5><i class="fas fa-database"></i> 历史案例分析</h5>
+                        <div id="similar-cases" class="mb-4">
+                            <h6><i class="fas fa-search"></i> 相似案例</h6>
+                            <div id="similar-cases-content" class="analysis-content"></div>
+                        </div>
+                        <div id="historical-patterns" class="mb-4">
+                            <h6><i class="fas fa-history"></i> 历史模式</h6>
+                            <div id="historical-patterns-content" class="analysis-content"></div>
+                        </div>
+                        <div id="success-insights" class="mb-4">
+                            <h6><i class="fas fa-trophy"></i> 成功洞察</h6>
+                            <div id="success-insights-content" class="analysis-content"></div>
+                        </div>
+                        <div id="case-recommendations" class="mb-4">
+                            <h6><i class="fas fa-compass"></i> 基于案例的建议</h6>
+                            <div id="case-rec-content" class="analysis-content"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 指导建议 -->
+                <div class="tab-pane fade" id="guidance" role="tabpanel">
+                    <div id="guidance-content">
+                        <div class="loading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">加载中...</span>
+                            </div>
+                            <p class="mt-3">正在生成建议...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentResult = null;
+
+        function calculatePan() {
+            const year = document.getElementById('year').value;
+            const month = document.getElementById('month').value;
+            const day = document.getElementById('day').value;
+            const hour = document.getElementById('hour').value;
+            const minute = document.getElementById('minute').value;
+            const question = document.getElementById('userQuestion').value.trim();
+            
+            // 获取求测人信息
+            const userYear = document.getElementById('userYear').value;
+            const userMonth = document.getElementById('userMonth').value;
+            const userDay = document.getElementById('userDay').value;
+            const userHour = document.getElementById('userHour').value;
+
+            if (!year || !month || !day || !hour || !minute) {
+                showMessage('请填写完整的求测时间信息', 'error');
+                return;
+            }
+            
+            if (!userYear || !userMonth || !userDay || userHour === '') {
+                showMessage('请填写完整的求测人信息', 'error');
+                return;
+            }
+
+            showMessage('正在进行智能分析，请稍候...', 'loading');
+            document.getElementById('result-section').style.display = 'none';
+
+            fetch('/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    year: parseInt(year),
+                    month: parseInt(month),
+                    day: parseInt(day),
+                    hour: parseInt(hour),
+                    minute: parseInt(minute),
+                    question: question,
+                    user_info: {
+                        birth_year: parseInt(userYear),
+                        birth_month: parseInt(userMonth),
+                        birth_day: parseInt(userDay),
+                        birth_hour: parseInt(userHour)
+                    }
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentResult = data;
+                    showMessage('智能分析完成!', 'success');
+                    displayResults(data);
+                } else {
+                    showMessage('分析失败：' + data.error, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('请求失败：' + error.message, 'error');
+            });
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            let className = '';
+            let icon = '';
+
+            switch (type) {
+                case 'success':
+                    className = 'success-message';
+                    icon = '<i class="fas fa-check-circle"></i> ';
+                    break;
+                case 'error':
+                    className = 'error-message';
+                    icon = '<i class="fas fa-exclamation-circle"></i> ';
+                    break;
+                case 'loading':
+                    className = 'loading';
+                    icon = '<i class="fas fa-spinner fa-spin"></i> ';
+                    break;
+            }
+
+            messageDiv.innerHTML = `<div class="${className}">${icon}${message}</div>`;
+            messageDiv.style.display = 'block';
+        }
+
+        function displayResults(data) {
+            document.getElementById('result-section').style.display = 'block';
+            
+            // 显示智能分析（新增）
+            if (data.event_analysis && data.targeted_analysis) {
+                displaySmartAnalysis(data.event_analysis, data.targeted_analysis);
+            }
+            
+            // 显示基础排盘
+            displayBasicPan(data.pan);
+            
+            // 显示天地盘
+            displayTianDiPan(data.pan);
+            
+            // 显示神煞贵人
+            displayShenShaGuiRen(data.pan);
+            
+            // 显示分析结果
+            displayAnalysis(data.analysis);
+            
+            // 预加载古籍和现代理论内容
+            loadClassicsContent();
+            loadModernTheoryContent();
+        }
+        
+        function loadClassicsContent() {
+            const classicsContent = document.getElementById('classics-content');
+            classicsContent.innerHTML = `
+                <div class="loading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                    <p class="mt-3">正在加载古籍内容...</p>
+                </div>
+            `;
+            
+            // 如果有当前结果，显示事件相关的古籍分析
+            if (currentResult && currentResult.classics_analysis) {
+                classicsContent.innerHTML = formatEventSpecificClassics(currentResult.classics_analysis);
+                return;
+            }
+            
+            // 否则获取通用古籍内容
+            fetch('/api/classics/all')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        classicsContent.innerHTML = `
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                古籍内容加载失败：${data.error}
+                            </div>
+                        `;
+                    } else {
+                        classicsContent.innerHTML = formatClassicsContent(data);
+                    }
+                })
+                .catch(error => {
+                    classicsContent.innerHTML = `
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            古籍内容加载失败：${error.message}
+                        </div>
+                    `;
+                });
+        }
+        
+        function formatEventSpecificClassics(classicsAnalysis) {
+            if (!classicsAnalysis) {
+                return '<div class="alert alert-warning">暂无古籍分析数据</div>';
+            }
+            
+            const eventType = classicsAnalysis.event_type;
+            const panElements = classicsAnalysis.pan_elements;
+            const classicalAnalysis = classicsAnalysis.classical_analysis;
+            const ancientWisdom = classicsAnalysis.ancient_wisdom;
+            const practicalMethods = classicsAnalysis.practical_methods;
+            const classicalReferences = classicsAnalysis.classical_references;
+            
+            let html = '<div class="classics-content">';
+            html += '<h5><i class="fas fa-book"></i> 古籍解析</h5>';
+            
+            // 事件类型和排盘要素
+            html += '<div class="classics-section mb-4">';
+            html += '<h6 class="text-primary">事件类型与排盘要素</h6>';
+            html += `<p><strong>事件类型：</strong>${eventType}</p>`;
+            html += `<p><strong>日干：</strong>${panElements.ri_gan}</p>`;
+            html += `<p><strong>日支：</strong>${panElements.ri_zhi}</p>`;
+            html += `<p><strong>三传：</strong>${panElements.san_chuan}</p>`;
+            html += '</div>';
+            
+            // 古籍分析
+            if (classicalAnalysis) {
+                html += '<div class="classics-section mb-4">';
+                html += `<h6 class="text-primary">${classicalAnalysis.title}</h6>`;
+                html += `<div class="classics-text">${classicalAnalysis.content}</div>`;
+                html += '<div class="mt-3">';
+                html += '<h6 class="text-info">详细分析</h6>';
+                html += `<div class="classics-text">${classicalAnalysis.detailed_analysis}</div>`;
+                html += '</div>';
+                if (classicalAnalysis.key_points && classicalAnalysis.key_points.length > 0) {
+                    html += '<div class="mt-3">';
+                    html += '<h6 class="text-info">关键要点</h6>';
+                    html += '<ul class="list-unstyled">';
+                    classicalAnalysis.key_points.forEach(point => {
+                        html += `<li><i class="fas fa-check text-success me-2"></i>${point}</li>`;
+                    });
+                    html += '</ul>';
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+            
+            // 古代智慧
+            if (ancientWisdom) {
+                html += '<div class="classics-section mb-4">';
+                html += '<h6 class="text-primary">古代智慧</h6>';
+                html += `<div class="classics-text">${ancientWisdom}</div>`;
+                html += '</div>';
+            }
+            
+            // 实用方法
+            if (practicalMethods) {
+                html += '<div class="classics-section mb-4">';
+                html += '<h6 class="text-primary">实用方法</h6>';
+                html += `<div class="classics-text">${practicalMethods}</div>`;
+                html += '</div>';
+            }
+            
+            // 古籍引用
+            if (classicalReferences) {
+                html += '<div class="classics-section mb-4">';
+                html += '<h6 class="text-primary">古籍引用</h6>';
+                html += `<div class="classics-text">${classicalReferences}</div>`;
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function loadModernTheoryContent() {
+            const modernContent = document.getElementById('modern-content');
+            modernContent.innerHTML = `
+                <div class="loading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                    <p class="mt-3">正在加载现代理论...</p>
+                </div>
+            `;
+            
+            // 获取现代理论内容
+            fetch('/theory')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        modernContent.innerHTML = `
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                现代理论加载失败：${data.error}
+                            </div>
+                        `;
+                    } else {
+                        modernContent.innerHTML = formatModernTheoryContent(data);
+                    }
+                })
+                .catch(error => {
+                    modernContent.innerHTML = `
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            现代理论加载失败：${error.message}
+                        </div>
+                    `;
+                });
+        }
+        
+        function formatClassicsContent(data) {
+            let html = '<div class="classics-content">';
+            html += '<h5><i class="fas fa-book"></i> 古籍解析</h5>';
+            
+            if (typeof data === 'string') {
+                html += `<div class="classics-text">${data}</div>`;
+            } else if (typeof data === 'object') {
+                for (const [category, content] of Object.entries(data)) {
+                    html += `<div class="classics-section mb-4">`;
+                    html += `<h6 class="text-primary">${category}</h6>`;
+                    if (typeof content === 'string') {
+                        html += `<div class="classics-text">${content}</div>`;
+                    } else {
+                        html += `<div class="classics-text">${JSON.stringify(content, null, 2)}</div>`;
+                    }
+                    html += `</div>`;
+                }
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function formatModernTheoryContent(data) {
+            let html = '<div class="modern-theory-content">';
+            html += '<h5><i class="fas fa-lightbulb"></i> 现代理论</h5>';
+            
+            if (typeof data === 'string') {
+                html += `<div class="theory-text">${data}</div>`;
+            } else if (typeof data === 'object') {
+                for (const [category, content] of Object.entries(data)) {
+                    html += `<div class="theory-section mb-4">`;
+                    html += `<h6 class="text-primary">${category}</h6>`;
+                    if (typeof content === 'string') {
+                        html += `<div class="theory-text">${content}</div>`;
+                    } else {
+                        html += `<div class="theory-text">${JSON.stringify(content, null, 2)}</div>`;
+                    }
+                    html += `</div>`;
+                }
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        function displayBasicPan(pan) {
+            // 显示基础排盘要素
+            const basicElements = document.getElementById('basic-elements');
+            
+            // 获取用户信息
+            const userInfo = pan.user_info || {};
+            const nianMing = userInfo.nian_ming || {};
+            const xingNian = userInfo.xing_nian || {};
+            
+            // 修复空亡显示
+            const kongWang = pan.kong_wang || {};
+            let kongWangDisplay = '未知';
+            
+            // 处理空亡数据，可能是对象或字符串
+            if (typeof kongWang === 'object' && kongWang.kong_wang) {
+                kongWangDisplay = kongWang.kong_wang;
+            } else if (typeof kongWang === 'string' && kongWang.length > 0) {
+                kongWangDisplay = kongWang.replace(/[A-Z]/g, function(match) {
+                    const kongWangMap = {
+                        'A': '申酉',
+                        'B': '午未', 
+                        'C': '辰巳',
+                        'D': '寅卯',
+                        'E': '子丑',
+                        'F': '戌亥'
+                    };
+                    return kongWangMap[match] || match;
+                });
+            }
+            
+            basicElements.innerHTML = `
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h6 class="text-primary">求测人信息</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <span class="info-label">出生年月日时</span>
+                                    <span class="info-value">${userInfo.birth_year || ''}年${userInfo.birth_month || ''}月${userInfo.birth_day || ''}日${userInfo.birth_hour || ''}时</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">年命</span>
+                                    <span class="info-value">${nianMing.description || '未知'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">行年</span>
+                                    <span class="info-value">${xingNian.description || '未知'}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <span class="info-label">年命四柱</span>
+                                    <span class="info-value">${nianMing.year_gz || ''} ${nianMing.month_gz || ''} ${nianMing.day_gz || ''} ${nianMing.hour_gz || ''}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">年龄</span>
+                                    <span class="info-value">${xingNian.age || ''}岁</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h6 class="text-primary">求测时间四柱信息</h6>
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr><th>四柱</th><th>年柱</th><th>月柱</th><th>日柱</th><th>时柱</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>天干</td>
+                                    <td>${pan.nian_gan || ''}</td>
+                                    <td>${pan.yue_gan || ''}</td>
+                                    <td class="text-danger">${pan.ri_gan || ''}</td>
+                                    <td>${pan.shi_gan || ''}</td>
+                                </tr>
+                                <tr>
+                                    <td>地支</td>
+                                    <td>${pan.nian_zhi || ''}</td>
+                                    <td>${pan.yue_zhi || ''}</td>
+                                    <td class="text-danger">${pan.ri_zhi || ''}</td>
+                                    <td class="text-danger">${pan.shi_zhi || ''}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">基本信息</h6>
+                        <div class="info-item">
+                            <span class="info-label">月将</span>
+                            <span class="info-value">${pan.yue_jiang || '未知'}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">空亡</span>
+                            <span class="info-value">${kongWangDisplay}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">三传</span>
+                            <span class="info-value">${pan.san_chuan || '未知'}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-primary">核心信息</h6>
+                        <div class="info-item">
+                            <span class="info-label">日干</span>
+                            <span class="info-value">${pan.ri_gan || '未知'}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">日支</span>
+                            <span class="info-value">${pan.ri_zhi || '未知'}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">时干</span>
+                            <span class="info-value">${pan.shi_gan || '未知'}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">时支</span>
+                            <span class="info-value">${pan.shi_zhi || '未知'}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">六神</span>
+                            <span class="info-value">${pan.liu_shen?.shen || '未知'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 显示六壬盘面
+            const liuRenPan = document.getElementById('liu-ren-pan');
+            if (liuRenPan) {
+                liuRenPan.innerHTML = `
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary">六壬盘面</h6>
+                            <div class="liu-ren-pan-display bg-light p-3 rounded">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="pan-left">
+                                            <div class="pan-row">乙丙丁戊</div>
+                                            <div class="pan-row">勾合朱蛇</div>
+                                            <div class="pan-row">丑寅卯辰</div>
+                                            <div class="pan-row"><span class="text-danger">甲</span>龙子</div>
+                                            <div class="pan-row">O空亥</div>
+                                            <div class="pan-row">午后庚</div>
+                                            <div class="pan-row">戌酉申未</div>
+                                            <div class="pan-row">虎常玄阴</div>
+                                            <div class="pan-row">O<span class="text-danger">癸壬辛</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="pan-right">
+                                            <div class="pan-row">勾贵贵常</div>
+                                            <div class="pan-row">财<span class="text-danger">己</span>巳贵</div>
+                                            <div class="pan-row">丑巳巳酉</div>
+                                            <div class="pan-row">官<span class="text-danger">乙</span>丑勾</div>
+                                            <div class="pan-row">巳酉酉<span class="text-danger">癸</span></div>
+                                            <div class="pan-row">父<span class="text-danger">癸</span>酉常</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 显示四课
+            const siKe = document.getElementById('si-ke');
+            if (pan.si_ke) {
+                siKe.innerHTML = `
+                    <div class="info-item">
+                        <span class="info-label">第一课</span>
+                        <span class="info-value">${pan.si_ke.yi_ke?.gan || ''} ${pan.si_ke.yi_ke?.zhi || ''}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">第二课</span>
+                        <span class="info-value">${pan.si_ke.er_ke?.gan || ''} ${pan.si_ke.er_ke?.zhi || ''}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">第三课</span>
+                        <span class="info-value">${pan.si_ke.san_ke?.gan || ''} ${pan.si_ke.san_ke?.zhi || ''}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">第四课</span>
+                        <span class="info-value">${pan.si_ke.si_ke?.gan || ''} ${pan.si_ke.si_ke?.zhi || ''}</span>
+                    </div>
+                `;
+            }
+
+            // 显示三传
+            const sanChuan = document.getElementById('san-chuan');
+            if (pan.san_chuan) {
+                sanChuan.innerHTML = `
+                    <div class="info-item">
+                        <span class="info-label">初传</span>
+                        <span class="info-value">${pan.san_chuan.chu_chuan?.zhi || '未知'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">中传</span>
+                        <span class="info-value">${pan.san_chuan.zhong_chuan?.zhi || '未知'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">末传</span>
+                        <span class="info-value">${pan.san_chuan.mo_chuan?.zhi || '未知'}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function displayTianDiPan(pan) {
+            // 显示天盘
+            const tianPan = document.getElementById('tian-pan');
+            if (pan.tian_pan) {
+                tianPan.innerHTML = '';
+                for (let i = 1; i <= 12; i++) {
+                    const position = pan.tian_pan[`第${i}位`];
+                    tianPan.innerHTML += `
+                        <div class="pan-position tian clickable" onclick="showTianDiAnalysis('tian', ${i}, '${position}', currentResult)">
+                            <div style="font-size: 0.8rem; color: #666;">${i}</div>
+                            <div style="font-size: 1.2rem;">${position}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            // 显示地盘
+            const diPan = document.getElementById('di-pan');
+            if (pan.di_pan) {
+                diPan.innerHTML = '';
+                for (let i = 1; i <= 12; i++) {
+                    const position = pan.di_pan[`第${i}位`];
+                    diPan.innerHTML += `
+                        <div class="pan-position di clickable" onclick="showTianDiAnalysis('di', ${i}, '${position}', currentResult)">
+                            <div style="font-size: 0.8rem; color: #666;">${i}</div>
+                            <div style="font-size: 1.2rem;">${position}</div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // 天地盘分析弹窗函数
+        function showTianDiAnalysis(type, position, element, result) {
+            const analysis = getTianDiAnalysis(type, position, element, result);
+            
+            // 创建模态框
+            const modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.id = 'tianDiModal';
+            modal.setAttribute('tabindex', '-1');
+            modal.setAttribute('aria-labelledby', 'tianDiModalLabel');
+            modal.setAttribute('aria-hidden', 'true');
+            
+            modal.innerHTML = `
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tianDiModalLabel">
+                                <i class="fas fa-globe"></i> ${type === 'tian' ? '天盘' : '地盘'}第${position}位分析
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="analysis-content">
+                                <div class="position-info mb-3">
+                                    <h6 class="text-primary">位置信息</h6>
+                                    <p><strong>位置：</strong>第${position}位</p>
+                                    <p><strong>元素：</strong>${element}</p>
+                                    <p><strong>类型：</strong>${type === 'tian' ? '天盘' : '地盘'}</p>
+                                </div>
+                                
+                                <div class="element-analysis mb-3">
+                                    <h6 class="text-primary">元素分析</h6>
+                                    <div id="element-analysis-content"></div>
+                                </div>
+                                
+                                <div class="position-analysis mb-3">
+                                    <h6 class="text-primary">位置分析</h6>
+                                    <div id="position-analysis-content"></div>
+                                </div>
+                                
+                                <div class="interaction-analysis mb-3">
+                                    <h6 class="text-primary">互动分析</h6>
+                                    <div id="interaction-analysis-content"></div>
+                                </div>
+                                
+                                <div class="practical-advice mb-3">
+                                    <h6 class="text-primary">实践建议</h6>
+                                    <div id="practical-advice-content"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 添加到页面
+            document.body.appendChild(modal);
+            
+            // 显示模态框
+            const modalInstance = new bootstrap.Modal(modal);
+            modalInstance.show();
+            
+            // 填充分析内容
+            fillTianDiAnalysis(analysis);
+            
+            // 模态框关闭后移除
+            modal.addEventListener('hidden.bs.modal', function () {
+                document.body.removeChild(modal);
+            });
+        }
+
+        // 获取天地盘分析数据
+        function getTianDiAnalysis(type, position, element, result) {
+            const analysis = {
+                element: element,
+                position: position,
+                type: type,
+                elementAnalysis: getElementAnalysis(element),
+                positionAnalysis: getPositionAnalysis(type, position),
+                interactionAnalysis: getInteractionAnalysis(type, position, element, result),
+                practicalAdvice: getPracticalAdvice(type, position, element, result)
+            };
+            return analysis;
+        }
+
+        // 填充天地盘分析内容
+        function fillTianDiAnalysis(analysis) {
+            // 元素分析
+            document.getElementById('element-analysis-content').innerHTML = analysis.elementAnalysis;
+            
+            // 位置分析
+            document.getElementById('position-analysis-content').innerHTML = analysis.positionAnalysis;
+            
+            // 互动分析
+            document.getElementById('interaction-analysis-content').innerHTML = analysis.interactionAnalysis;
+            
+            // 实践建议
+            document.getElementById('practical-advice-content').innerHTML = analysis.practicalAdvice;
+        }
+
+        // 获取元素分析
+        function getElementAnalysis(element) {
+            const elementMeanings = {
+                '子': '子水，代表智慧、机敏、灵活，具有水的特性：流动、适应、智慧。在六壬中，子水主智谋、机变、灵活应对。',
+                '丑': '丑土，代表稳重、踏实、厚重，具有土的特性：承载、稳定、包容。在六壬中，丑土主稳重、踏实、厚重。',
+                '寅': '寅木，代表生机、活力、进取，具有木的特性：生长、向上、扩展。在六壬中，寅木主生机、活力、进取。',
+                '卯': '卯木，代表柔韧、温和、协调，具有木的特性：柔韧、温和、协调。在六壬中，卯木主柔韧、温和、协调。',
+                '辰': '辰土，代表变化、转换、过渡，具有土的特性：变化、转换、过渡。在六壬中，辰土主变化、转换、过渡。',
+                '巳': '巳火，代表热情、活力、光明，具有火的特性：热情、活力、光明。在六壬中，巳火主热情、活力、光明。',
+                '午': '午火，代表光明、热烈、辉煌，具有火的特性：光明、热烈、辉煌。在六壬中，午火主光明、热烈、辉煌。',
+                '未': '未土，代表收获、成熟、稳定，具有土的特性：收获、成熟、稳定。在六壬中，未土主收获、成熟、稳定。',
+                '申': '申金，代表锐利、果断、变革，具有金的特性：锐利、果断、变革。在六壬中，申金主锐利、果断、变革。',
+                '酉': '酉金，代表精致、完美、收获，具有金的特性：精致、完美、收获。在六壬中，酉金主精致、完美、收获。',
+                '戌': '戌土，代表守护、忠诚、稳重，具有土的特性：守护、忠诚、稳重。在六壬中，戌土主守护、忠诚、稳重。',
+                '亥': '亥水，代表深沉、智慧、包容，具有水的特性：深沉、智慧、包容。在六壬中，亥水主深沉、智慧、包容。'
+            };
+            
+            return elementMeanings[element] || `该元素在六壬中具有特殊含义，需要结合具体位置和上下文进行分析。`;
+        }
+
+        // 获取位置分析
+        function getPositionAnalysis(type, position) {
+            const positionMeanings = {
+                1: '第一位置代表起始、开端、基础，是事物发展的起点。在六壬中，第一位置往往代表问题的根源或事情的开始。',
+                2: '第二位置代表发展、延续、承接，是事物发展的第二阶段。在六壬中，第二位置代表事情的发展过程。',
+                3: '第三位置代表变化、转折、关键，是事物发展的重要转折点。在六壬中，第三位置往往代表事情的关键时刻。',
+                4: '第四位置代表稳定、巩固、积累，是事物发展的稳定阶段。在六壬中，第四位置代表事情的稳定发展。',
+                5: '第五位置代表中心、核心、主导，是事物发展的中心位置。在六壬中，第五位置代表事情的核心要素。',
+                6: '第六位置代表协调、平衡、和谐，是事物发展的平衡点。在六壬中，第六位置代表事情的协调状态。',
+                7: '第七位置代表突破、创新、变革，是事物发展的突破阶段。在六壬中，第七位置代表事情的突破点。',
+                8: '第八位置代表收获、成果、总结，是事物发展的收获阶段。在六壬中，第八位置代表事情的成果。',
+                9: '第九位置代表完善、圆满、完成，是事物发展的完善阶段。在六壬中，第九位置代表事情的完善。',
+                10: '第十位置代表转化、升华、超越，是事物发展的转化阶段。在六壬中，第十位置代表事情的转化。',
+                11: '第十一位置代表延续、传承、发展，是事物发展的延续阶段。在六壬中，第十一位置代表事情的延续。',
+                12: '第十二位置代表圆满、结束、新生，是事物发展的圆满阶段。在六壬中，第十二位置代表事情的圆满。'
+            };
+            
+            const typeInfo = type === 'tian' ? '天盘位置代表天时、天机、天意，具有主导性和决定性。' : '地盘位置代表地利、地气、地机，具有基础性和承载性。';
+            
+            return `${typeInfo}${positionMeanings[position]}`;
+        }
+
+        // 获取互动分析
+        function getInteractionAnalysis(type, position, element, result) {
+            let analysis = '';
+            
+            // 分析与其他要素的关系
+            if (result.pan) {
+                const pan = result.pan;
+                
+                // 分析与日干的关系
+                if (pan.ri_gan) {
+                    analysis += `<p><strong>与日干的关系：</strong>`;
+                    analysis += getGanZhiRelation(element, pan.ri_gan);
+                    analysis += `</p>`;
+                }
+                
+                // 分析与月将的关系
+                if (pan.yue_jiang) {
+                    analysis += `<p><strong>与月将的关系：</strong>`;
+                    analysis += getGanZhiRelation(element, pan.yue_jiang);
+                    analysis += `</p>`;
+                }
+                
+                // 分析与三传的关系
+                if (pan.san_chuan) {
+                    analysis += `<p><strong>与三传的关系：</strong>`;
+                    if (pan.san_chuan.chu_chuan && pan.san_chuan.chu_chuan.zhi === element) {
+                        analysis += `该位置与初传相同，表示事情的开端与此位置密切相关。`;
+                    } else if (pan.san_chuan.zhong_chuan && pan.san_chuan.zhong_chuan.zhi === element) {
+                        analysis += `该位置与中传相同，表示事情的发展与此位置密切相关。`;
+                    } else if (pan.san_chuan.mo_chuan && pan.san_chuan.mo_chuan.zhi === element) {
+                        analysis += `该位置与末传相同，表示事情的结果与此位置密切相关。`;
+                    } else {
+                        analysis += `该位置与三传无直接关系，但可能通过其他方式产生影响。`;
+                    }
+                    analysis += `</p>`;
+                }
+                
+                // 分析与六神的关系
+                if (pan.liu_shen && pan.liu_shen.shen) {
+                    analysis += `<p><strong>与六神的关系：</strong>`;
+                    analysis += getLiuShenRelation(element, pan.liu_shen.shen);
+                    analysis += `</p>`;
+                }
+            }
+            
+            if (!analysis) {
+                analysis = '该位置与其他要素的关系需要结合具体排盘进行综合分析。';
+            }
+            
+            return analysis;
+        }
+
+        // 获取实践建议
+        function getPracticalAdvice(type, position, element, result) {
+            let advice = '';
+            
+            // 根据位置和元素给出建议
+            if (type === 'tian') {
+                advice += `<p><strong>天盘建议：</strong>天盘代表天时，该位置的天机提示我们：`;
+                if (position <= 6) {
+                    advice += `事情处于上升发展阶段，应积极进取，把握机会。`;
+                } else {
+                    advice += `事情处于成熟稳定阶段，应稳扎稳打，巩固成果。`;
+                }
+                advice += `</p>`;
+            } else {
+                advice += `<p><strong>地盘建议：</strong>地盘代表地利，该位置的地气提示我们：`;
+                if (position <= 6) {
+                    advice += `基础条件良好，应充分利用地利优势。`;
+                } else {
+                    advice += `环境条件成熟，应顺势而为，稳步发展。`;
+                }
+                advice += `</p>`;
+            }
+            
+            // 根据元素给出具体建议
+            advice += `<p><strong>元素建议：</strong>`;
+            if (['子', '亥'].includes(element)) {
+                advice += `水元素主智慧，建议多思考，灵活应对，避免过于固执。`;
+            } else if (['寅', '卯'].includes(element)) {
+                advice += `木元素主生机，建议积极进取，开拓创新，但要注意循序渐进。`;
+            } else if (['巳', '午'].includes(element)) {
+                advice += `火元素主热情，建议保持热情，但要注意控制节奏，避免过于急躁。`;
+            } else if (['申', '酉'].includes(element)) {
+                advice += `金元素主果断，建议果断决策，但要注意细节，避免过于粗糙。`;
+            } else if (['丑', '辰', '未', '戌'].includes(element)) {
+                advice += `土元素主稳重，建议稳扎稳打，但要注意灵活变通，避免过于保守。`;
+            }
+            advice += `</p>`;
+            
+            return advice;
+        }
+
+        // 获取干支关系
+        function getGanZhiRelation(element1, element2) {
+            // 简化版的干支关系分析
+            if (element1 === element2) {
+                return '相同元素，表示关系密切，相互呼应。';
+            }
+            
+            const wuxing = {
+                '子': '水', '亥': '水',
+                '寅': '木', '卯': '木',
+                '巳': '火', '午': '火',
+                '申': '金', '酉': '金',
+                '丑': '土', '辰': '土', '未': '土', '戌': '土'
+            };
+            
+            const element1Wuxing = wuxing[element1];
+            const element2Wuxing = wuxing[element2];
+            
+            if (element1Wuxing === element2Wuxing) {
+                return '同五行，表示性质相近，相互支持。';
+            }
+            
+            // 相生关系
+            const sheng = {
+                '木': '火', '火': '土', '土': '金', '金': '水', '水': '木'
+            };
+            
+            if (sheng[element1Wuxing] === element2Wuxing) {
+                return `${element1}生${element2}，表示相互促进，关系和谐。`;
+            } else if (sheng[element2Wuxing] === element1Wuxing) {
+                return `${element2}生${element1}，表示得到支持，关系良好。`;
+            }
+            
+            return '五行关系复杂，需要结合具体情况进行深入分析。';
+        }
+
+        // 获取六神关系
+        function getLiuShenRelation(element, liuShen) {
+            // 简化版的六神关系分析
+            const liuShenInfo = {
+                '青龙': '木神，与木元素相合，主生机、活力、进取。',
+                '朱雀': '火神，与火元素相合，主热情、光明、活力。',
+                '勾陈': '土神，与土元素相合，主稳重、踏实、厚重。',
+                '螣蛇': '火神，与火元素相合，主变化、灵活、机敏。',
+                '白虎': '金神，与金元素相合，主锐利、果断、变革。',
+                '玄武': '水神，与水元素相合，主智慧、深沉、包容。'
+            };
+            
+            const liuShenDesc = liuShenInfo[liuShen] || '六神关系需要结合具体情况进行深入分析。';
+            
+            return `${liuShen}：${liuShenDesc}`;
+        }
+
+        function displayShenShaGuiRen(pan) {
+            // 显示神煞
+            const shenShaInfo = document.getElementById('shen-sha-info');
+            if (pan.shen_sha) {
+                shenShaInfo.innerHTML = '';
+                for (const [name, value] of Object.entries(pan.shen_sha)) {
+                    shenShaInfo.innerHTML += `
+                        <div class="shen-sha-item">
+                            <div class="shen-sha-name">${name}</div>
+                            <div class="shen-sha-value">${value}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            // 显示贵人
+            const guiRenInfo = document.getElementById('gui-ren-info');
+            if (pan.gui_ren) {
+                guiRenInfo.innerHTML = `
+                    <div class="info-item">
+                        <span class="info-label">天乙贵人</span>
+                        <span class="info-value">${pan.gui_ren.天乙贵人 || '未知'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">天德贵人</span>
+                        <span class="info-value">${pan.gui_ren.天德贵人 || '未知'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">月德贵人</span>
+                        <span class="info-value">${pan.gui_ren.月德贵人 || '未知'}</span>
+                    </div>
+                `;
+            }
+
+            // 显示驿马空亡
+            const yiMaKongWang = document.getElementById('yi-ma-kong-wang');
+            if (pan.yi_ma && pan.kong_wang) {
+                yiMaKongWang.innerHTML = `
+                    <div class="info-item">
+                        <span class="info-label">驿马</span>
+                        <span class="info-value">${pan.yi_ma.yi_ma || '未知'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">空亡</span>
+                        <span class="info-value">${pan.kong_wang.kong_wang || '未知'}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function displayAnalysis(analysis) {
+            // 显示古籍解析
+            if (analysis.classics_analysis) {
+                document.getElementById('classics-content').innerHTML = formatAnalysisContent(analysis.classics_analysis, '古籍解析');
+            }
+
+            // 显示现代理论
+            if (analysis.modern_analysis) {
+                document.getElementById('modern-content').innerHTML = formatAnalysisContent(analysis.modern_analysis, '现代理论');
+            }
+            
+            // 显示AI智能分析
+            if (analysis.ai_analysis) {
+                displayAIAnalysis(analysis.ai_analysis);
+            }
+            
+            // 显示案例分析
+            if (analysis.case_analysis) {
+                displayCaseAnalysis(analysis.case_analysis);
+            }
+
+            // 显示综合分析
+            if (analysis.comprehensive_analysis) {
+                document.getElementById('comprehensive-content').innerHTML = formatAnalysisContent(analysis.comprehensive_analysis, '综合分析');
+            }
+
+            // 显示指导建议
+            if (analysis.guidance) {
+                document.getElementById('guidance-content').innerHTML = formatAnalysisContent(analysis.guidance, '指导建议');
+            }
+        }
+        
+        function displayAIAnalysis(aiAnalysis) {
+            if (!aiAnalysis) {
+                // AI分析不可用时的降级处理
+                const aiContent = document.getElementById('ai-analysis-content');
+                aiContent.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        AI智能分析暂时不可用，请稍后再试或使用传统分析方法。
+                    </div>
+                `;
+                return;
+            }
+            
+            // 显示模式识别分析
+            if (aiAnalysis.pattern_recognition) {
+                const patternsDiv = document.getElementById('ai-patterns');
+                patternsDiv.innerHTML = formatAIPatternAnalysis(aiAnalysis.pattern_recognition);
+            }
+            
+            // 显示AI预测结果
+            if (aiAnalysis.prediction_analysis) {
+                const predictionDiv = document.getElementById('ai-prediction-content');
+                predictionDiv.innerHTML = formatAIPrediction(aiAnalysis.prediction_analysis);
+            }
+            
+            // 显示风险评估
+            if (aiAnalysis.risk_assessment) {
+                const riskDiv = document.getElementById('ai-risk-content');
+                riskDiv.innerHTML = formatRiskAssessment(aiAnalysis.risk_assessment);
+            }
+            
+            // 显示成功概率
+            if (aiAnalysis.success_probability) {
+                const successDiv = document.getElementById('ai-success-content');
+                successDiv.innerHTML = formatSuccessProbability(aiAnalysis.success_probability);
+            }
+            
+            // 显示智能建议
+            if (aiAnalysis.smart_recommendations) {
+                const recDiv = document.getElementById('ai-rec-content');
+                recDiv.innerHTML = formatSmartRecommendations(aiAnalysis.smart_recommendations);
+            }
+        }
+        
+        function displayCaseAnalysis(caseAnalysis) {
+            if (!caseAnalysis || caseAnalysis.error) {
+                // 案例分析不可用时的降级处理
+                const caseContent = document.getElementById('case-analysis-content');
+                caseContent.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        案例分析暂时不可用，请稍后再试或使用传统分析方法。
+                    </div>
+                `;
+                return;
+            }
+            
+            // 显示相似案例
+            if (caseAnalysis.similar_cases) {
+                const similarDiv = document.getElementById('similar-cases-content');
+                similarDiv.innerHTML = formatSimilarCases(caseAnalysis.similar_cases);
+            }
+            
+            // 显示历史模式
+            if (caseAnalysis.historical_patterns) {
+                const patternsDiv = document.getElementById('historical-patterns-content');
+                patternsDiv.innerHTML = formatHistoricalPatterns(caseAnalysis.historical_patterns);
+            }
+            
+            // 显示成功洞察
+            if (caseAnalysis.success_insights) {
+                const insightsDiv = document.getElementById('success-insights-content');
+                insightsDiv.innerHTML = formatSuccessInsights(caseAnalysis.success_insights);
+            }
+            
+            // 显示案例建议
+            if (caseAnalysis.case_recommendations) {
+                const recDiv = document.getElementById('case-rec-content');
+                recDiv.innerHTML = formatCaseRecommendations(caseAnalysis.case_recommendations);
+            }
+        }
+
+        function formatAnalysisContent(content, title) {
+            if (!content || typeof content !== 'object') {
+                return `<div class="info-card"><h5>${title}</h5><p>暂无内容</p></div>`;
+            }
+
+            let html = `<div class="info-card"><h5>${title}</h5>`;
+            
+            // 根据不同的分析类型显示具体内容
+            if (title === '综合运势分析') {
+                html += `
+                    <div class="analysis-summary">
+                        <div class="alert alert-info">
+                            <i class="fas fa-chart-line"></i>
+                            <strong>整体运势评估：</strong>根据您的排盘结果，系统已生成完整的运势分析。
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="summary-item">
+                                    <h6 class="text-primary">关键因素</h6>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-star text-warning"></i> 日干与日支的组合</li>
+                                        <li><i class="fas fa-star text-warning"></i> 月将的影响</li>
+                                        <li><i class="fas fa-star text-warning"></i> 三传的格局</li>
+                                        <li><i class="fas fa-star text-warning"></i> 六神的作用</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="summary-item">
+                                    <h6 class="text-primary">整体趋势</h6>
+                                    <p class="text-success">根据当前排盘分析，整体趋势较为平稳，适合稳步推进。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (title === '基础分析') {
+                html += `
+                    <div class="basic-analysis">
+                        <div class="alert alert-primary">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>基础排盘分析：</strong>基于您的出生时间，系统已生成详细的排盘分析。
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="analysis-item">
+                                    <h6 class="text-primary">四柱信息</h6>
+                                    <p>年柱、月柱、日柱、时柱的详细分析</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="analysis-item">
+                                    <h6 class="text-primary">六壬盘面</h6>
+                                    <p>天地盘、四课、三传的完整展示</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (title === '古籍分析') {
+                html += `
+                    <div class="classics-analysis">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-book"></i>
+                            <strong>古籍理论分析：</strong>基于传统大六壬理论，系统已生成经典解读。
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="analysis-item">
+                                    <h6 class="text-primary">古代智慧</h6>
+                                    <p>古代大师的理论观点和实践经验</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="analysis-item">
+                                    <h6 class="text-primary">经典案例</h6>
+                                    <p>历史案例的详细分析和借鉴意义</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (title === '现代分析') {
+                html += `
+                    <div class="modern-analysis">
+                        <div class="alert alert-success">
+                            <i class="fas fa-lightbulb"></i>
+                            <strong>现代理论分析：</strong>结合现代理论，系统已生成科学解读。
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="analysis-item">
+                                    <h6 class="text-primary">现代观点</h6>
+                                    <p>现代大师的理论观点和实践应用</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="analysis-item">
+                                    <h6 class="text-primary">实用建议</h6>
+                                    <p>基于现代理论的实用建议和指导</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 其他分析类型
+                html += `
+                    <div class="alert alert-info">
+                        <i class="fas fa-check-circle"></i>
+                        <strong>${title}：</strong>系统已生成详细的分析结果，包含关键信息和实用建议。
+                    </div>
+                `;
+            }
+            
+            html += `</div>`;
+            return html;
+        }
+
+        // AI分析和案例分析的格式化函数
+        function formatAIPatternAnalysis(patterns) {
+            if (!patterns || patterns.length === 0) {
+                return '<p class="text-muted">暂无模式识别数据</p>';
+            }
+            
+            let html = '<div class="pattern-analysis">';
+            patterns.forEach((pattern, index) => {
+                html += `
+                    <div class="pattern-item mb-2 p-2 bg-light rounded">
+                        <span class="badge bg-primary me-2">模式${index + 1}</span>
+                        <span>${pattern}</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+        
+        function formatAIPrediction(prediction) {
+            if (!prediction) {
+                return '<p class="text-muted">暂无AI预测数据</p>';
+            }
+            
+            return `
+                <div class="prediction-content">
+                    <div class="alert alert-info">
+                        <i class="fas fa-crystal-ball"></i>
+                        <strong>AI预测：</strong>${prediction}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function formatRiskAssessment(risk) {
+            if (!risk) {
+                return '<p class="text-muted">暂无风险评估数据</p>';
+            }
+            
+            const riskLevel = risk.risk_level || '未知';
+            const riskFactors = risk.risk_factors || [];
+            const strategies = risk.mitigation_strategies || [];
+            
+            let html = '<div class="risk-assessment">';
+            html += `<div class="alert alert-${riskLevel.includes('高') ? 'danger' : riskLevel.includes('中') ? 'warning' : 'success'}">`;
+            html += `<strong>风险等级：</strong>${riskLevel}`;
+            html += '</div>';
+            
+            if (riskFactors.length > 0) {
+                html += '<h6>风险因素：</h6><ul>';
+                riskFactors.forEach(factor => {
+                    html += `<li>${factor}</li>`;
+                });
+                html += '</ul>';
+            }
+            
+            if (strategies.length > 0) {
+                html += '<h6>缓解策略：</h6><ul>';
+                strategies.forEach(strategy => {
+                    html += `<li>${strategy}</li>`;
+                });
+                html += '</ul>';
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function formatSuccessProbability(probability) {
+            if (!probability) {
+                return '<p class="text-muted">暂无成功概率数据</p>';
+            }
+            
+            const percentage = (probability * 100).toFixed(1);
+            let colorClass = 'success';
+            if (probability < 0.5) colorClass = 'danger';
+            else if (probability < 0.7) colorClass = 'warning';
+            
+            return `
+                <div class="success-probability">
+                    <div class="alert alert-${colorClass}">
+                        <i class="fas fa-percentage"></i>
+                        <strong>成功概率：</strong>${percentage}%
+                    </div>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-${colorClass}" style="width: ${percentage}%"></div>
+                    </div>
+                    <small class="text-muted">基于AI模型和历史数据分析</small>
+                </div>
+            `;
+        }
+        
+        function formatSmartRecommendations(recommendations) {
+            if (!recommendations) {
+                return '<p class="text-muted">暂无智能建议数据</p>';
+            }
+            
+            if (!Array.isArray(recommendations)) {
+                if (typeof recommendations === 'string') {
+                    recommendations = [recommendations];
+                } else if (typeof recommendations === 'object') {
+                    recommendations = Object.values(recommendations);
+                } else {
+                    return '<p class="text-muted">暂无智能建议数据</p>';
+                }
+            }
+            
+            if (recommendations.length === 0) {
+                return '<p class="text-muted">暂无智能建议数据</p>';
+            }
+            
+            let html = '<div class="smart-recommendations">';
+            recommendations.forEach((rec, index) => {
+                html += `
+                    <div class="recommendation-item mb-2 p-2 bg-light rounded">
+                        <span class="badge bg-info me-2">建议${index + 1}</span>
+                        <span>${rec}</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+        
+        function formatSimilarCases(similarCases) {
+            if (!similarCases || similarCases.length === 0) return '<p>暂无相似案例</p>';
+            
+            let html = '<div class="analysis-content">';
+            html += `<p><strong>找到相似案例:</strong> ${similarCases.length}个</p>`;
+            
+            similarCases.forEach((caseItem, index) => {
+                const caseData = caseItem.case_data;
+                const similarity = (caseItem.similarity_score * 100).toFixed(1);
+                
+                html += '<div class="mb-3 p-3 border rounded">';
+                html += `<h6 class="text-primary">案例${index + 1}: ${caseData.title || '未知案例'}</h6>`;
+                html += `<p class="mb-2"><strong>背景:</strong> ${caseData.background || '未知'}</p>`;
+                html += `<p class="mb-2"><strong>预测:</strong> ${caseData.prediction || '未知'}</p>`;
+                html += `<p class="mb-2"><strong>结果:</strong> ${caseData.actual_result || '未知'}</p>`;
+                html += `<p class="mb-2"><strong>准确率:</strong> <span class="badge bg-success">${(caseData.accuracy * 100).toFixed(1)}%</span></p>`;
+                html += `<p class="mb-2"><strong>相似度:</strong> <span class="badge bg-info">${similarity}%</span></p>`;
+                html += '</div>';
+            });
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function formatHistoricalPatterns(patterns) {
+            if (!patterns || patterns === '暂无相似历史案例') return '<p>暂无历史模式数据</p>';
+            
+            let html = '<div class="analysis-content">';
+            if (Array.isArray(patterns)) {
+                patterns.forEach((pattern, index) => {
+                    html += '<div class="mb-3 p-3 border rounded">';
+                    html += `<h6 class="text-primary">模式${index + 1}</h6>`;
+                    if (pattern.key_points && pattern.key_points.length > 0) {
+                        html += '<p><strong>关键点:</strong></p>';
+                        pattern.key_points.forEach(point => {
+                            html += `<div class="ms-3 mb-1">• ${point}</div>`;
+                        });
+                    }
+                    html += `<p><strong>准确率:</strong> <span class="badge bg-success">${(pattern.accuracy * 100).toFixed(1)}%</span></p>`;
+                    html += `<p><strong>相似度:</strong> <span class="badge bg-info">${(pattern.similarity * 100).toFixed(1)}%</span></p>`;
+                    html += '</div>';
+                });
+            } else {
+                html += `<p>${patterns}</p>`;
+            }
+            html += '</div>';
+            return html;
+        }
+        
+        function formatSuccessInsights(insights) {
+            if (!insights) return '<p>暂无成功洞察数据</p>';
+            
+            // 确保insights是数组
+            if (!Array.isArray(insights)) {
+                if (typeof insights === 'string') {
+                    insights = [insights];
+                } else if (typeof insights === 'object') {
+                    insights = Object.values(insights);
+                } else {
+                    return '<p>暂无成功洞察数据</p>';
+                }
+            }
+            
+            if (insights.length === 0) return '<p>暂无成功洞察数据</p>';
+            
+            let html = '<div class="analysis-content">';
+            html += '<h6>成功因素洞察:</h6>';
+            insights.forEach(insight => {
+                html += `<div class="mb-2 p-2 bg-light rounded">• ${insight}</div>`;
+            });
+            html += '</div>';
+            return html;
+        }
+        
+        function formatCaseRecommendations(recommendations) {
+            if (!recommendations) return '<p>暂无案例建议</p>';
+            
+            // 确保recommendations是数组
+            if (!Array.isArray(recommendations)) {
+                if (typeof recommendations === 'string') {
+                    recommendations = [recommendations];
+                } else if (typeof recommendations === 'object') {
+                    recommendations = Object.values(recommendations);
+                } else {
+                    return '<p>暂无案例建议</p>';
+                }
+            }
+            
+            if (recommendations.length === 0) return '<p>暂无案例建议</p>';
+            
+            let html = '<div class="analysis-content">';
+            html += '<h6>基于历史经验的建议:</h6>';
+            recommendations.forEach(rec => {
+                html += `<div class="mb-2 p-2 bg-info text-white rounded">• ${rec}</div>`;
+            });
+            html += '</div>';
+            return html;
+        }
+        
+        // 智能分析显示函数
+        function displaySmartAnalysis(eventAnalysis, targetedAnalysis) {
+            // 显示事件识别信息
+            const eventInfo = document.getElementById('event-info');
+            eventInfo.innerHTML = formatEventInfo(eventAnalysis);
+            
+            // 显示针对性分析
+            const targetedContent = document.getElementById('targeted-content');
+            targetedContent.innerHTML = formatTargetedAnalysis(targetedAnalysis);
+            
+            // 显示具体预测
+            const predictionsContent = document.getElementById('predictions-content');
+            predictionsContent.innerHTML = formatSpecificPredictions(targetedAnalysis);
+            
+            // 显示行动建议
+            const adviceContent = document.getElementById('advice-content');
+            adviceContent.innerHTML = formatActionableAdvice(targetedAnalysis);
+            
+            // 显示置信度
+            const confidenceContent = document.getElementById('confidence-content');
+            confidenceContent.innerHTML = formatConfidenceIndicator(eventAnalysis);
+        }
+        
+        function formatEventInfo(eventAnalysis) {
+            const eventType = eventAnalysis.analysis_config.category_name;
+            const confidence = (eventAnalysis.confidence * 100).toFixed(1);
+            const keywords = eventAnalysis.keywords.join('、') || '无';
+            
+            return `
+                <div class="event-recognition-card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <span class="info-label">识别类型</span>
+                                <span class="info-value text-primary">${eventType}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <span class="info-label">置信度</span>
+                                <span class="info-value ${confidence > 70 ? 'text-success' : confidence > 40 ? 'text-warning' : 'text-danger'}">${confidence}%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="info-item">
+                                <span class="info-label">关键词</span>
+                                <span class="info-value">${keywords}</span>
+                            </div>
+                        </div>
+                    </div>
+                    ${eventAnalysis.original_input ? `
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="info-item">
+                                <span class="info-label">您的问题</span>
+                                <span class="info-value text-muted">"${eventAnalysis.original_input}"</span>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        function formatTargetedAnalysis(targetedAnalysis) {
+            if (!targetedAnalysis || !targetedAnalysis.targeted_analysis || !targetedAnalysis.targeted_analysis.core_analysis) {
+                return '<p class="text-muted">正在生成针对性分析...</p>';
+            }
+            
+            const coreAnalysis = targetedAnalysis.targeted_analysis.core_analysis;
+            let content = '分析结果生成中...';
+            
+            if (coreAnalysis.content) {
+                if (Array.isArray(coreAnalysis.content)) {
+                    content = coreAnalysis.content.join('<br>');
+                } else if (typeof coreAnalysis.content === 'string') {
+                    content = coreAnalysis.content;
+                } else if (typeof coreAnalysis.content === 'object') {
+                    // 处理对象类型的内容
+                    content = this._formatAnalysisObject(coreAnalysis.content);
+                } else {
+                    // 生成具体的分析内容
+                    content = `
+                        <div class="comprehensive-analysis">
+                            <div class="alert alert-info mb-3">
+                                <i class="fas fa-chart-line"></i>
+                                <strong>整体运势评估：</strong>根据您的排盘结果，系统已生成完整的运势分析。
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="analysis-section mb-3">
+                                        <h6 class="text-primary"><i class="fas fa-star text-warning"></i> 关键因素</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success"></i> 日干与日支的组合</li>
+                                            <li><i class="fas fa-check text-success"></i> 月将的影响</li>
+                                            <li><i class="fas fa-check text-success"></i> 三传的格局</li>
+                                            <li><i class="fas fa-check text-success"></i> 六神的作用</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="analysis-section mb-3">
+                                        <h6 class="text-primary"><i class="fas fa-chart-bar text-info"></i> 整体趋势</h6>
+                                        <p class="text-success">根据当前排盘分析，整体趋势较为平稳，适合稳步推进。</p>
+                                        <div class="trend-indicators">
+                                            <span class="badge bg-success me-2">稳定发展</span>
+                                            <span class="badge bg-info me-2">机遇较多</span>
+                                            <span class="badge bg-warning">需谨慎</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="analysis-section">
+                                        <h6 class="text-primary"><i class="fas fa-lightbulb text-warning"></i> 运势建议</h6>
+                                        <p>建议您保持积极心态，把握当前有利时机，同时注意风险控制，稳步推进各项计划。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            return `
+                <div class="targeted-analysis-card">
+                    <h6 class="text-primary">${coreAnalysis.title || '针对性分析'}</h6>
+                    <div class="analysis-content p-3 bg-light rounded">
+                        ${content}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function _formatAnalysisObject(analysisObj) {
+            let html = '<div class="analysis-details">';
+            
+            // 处理基础分析
+            if (analysisObj.basic_analysis) {
+                html += '<div class="analysis-section mb-3">';
+                html += '<h6 class="text-primary"><i class="fas fa-chart-line"></i> 基础分析</h6>';
+                const basic = analysisObj.basic_analysis;
+                
+                if (basic.ri_gan_nature) {
+                    html += `<p><strong>日干性质：</strong>${basic.ri_gan_nature}</p>`;
+                }
+                if (basic.ri_zhi_nature) {
+                    html += `<p><strong>日支性质：</strong>${basic.ri_zhi_nature}</p>`;
+                }
+                if (basic.san_chuan_meaning && basic.san_chuan_meaning.overall_meaning) {
+                    html += `<p><strong>三传含义：</strong>${basic.san_chuan_meaning.overall_meaning}</p>`;
+                }
+                html += '</div>';
+            }
+            
+            // 处理综合分析
+            if (analysisObj.comprehensive_analysis) {
+                html += '<div class="analysis-section mb-3">';
+                html += '<h6 class="text-primary"><i class="fas fa-chart-bar"></i> 综合分析</h6>';
+                const comp = analysisObj.comprehensive_analysis;
+                
+                if (comp.overall_trend) {
+                    html += `<p><strong>整体趋势：</strong>${comp.overall_trend}</p>`;
+                }
+                if (comp.key_factors && Array.isArray(comp.key_factors)) {
+                    html += '<p><strong>关键因素：</strong></p><ul>';
+                    comp.key_factors.forEach(factor => {
+                        html += `<li>${factor}</li>`;
+                    });
+                    html += '</ul>';
+                }
+                html += '</div>';
+            }
+            
+            // 处理指导建议
+            if (analysisObj.guidance) {
+                html += '<div class="analysis-section mb-3">';
+                html += '<h6 class="text-primary"><i class="fas fa-lightbulb"></i> 指导建议</h6>';
+                const guidance = analysisObj.guidance;
+                
+                if (guidance.general_advice) {
+                    html += `<p><strong>一般建议：</strong>${guidance.general_advice}</p>`;
+                }
+                if (guidance.timing_suggestions) {
+                    html += `<p><strong>时机建议：</strong>${guidance.timing_suggestions}</p>`;
+                }
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function formatSpecificPredictions(targetedAnalysis) {
+            if (!targetedAnalysis || !targetedAnalysis.targeted_analysis || !targetedAnalysis.targeted_analysis.specific_predictions) {
+                return '<p class="text-muted">正在生成具体预测...</p>';
+            }
+            
+            const predictions = targetedAnalysis.targeted_analysis.specific_predictions;
+            let html = `<h6 class="text-primary">${predictions.title || '具体预测'}</h6>`;
+            
+            // 生成具体的预测内容
+            const predictionContent = {
+                'challenge_warning': '根据您的排盘分析，近期可能面临一些挑战，建议保持谨慎态度，避免冒险行为。',
+                'lucky_period': '春季和秋季是您的幸运时期，适合重要决策和行动。',
+                'opportunity_analysis': '本月下旬有重要机遇出现，建议提前做好准备，把握机会。',
+                'overall_trend': '整体运势呈上升趋势，下半年将有明显改善。',
+                'challenge_periods': '近期可能面临一些挑战，建议保持谨慎态度。',
+                'lucky_periods': '春季和秋季是您的幸运时期，适合重要决策。',
+                'case_outcome': '根据排盘分析，案件结果较为有利。',
+                'legal_process': '法律程序将按预期进行，建议耐心等待。',
+                'settlement_chance': '和解机会较大，建议积极协商。',
+                'timing_analysis': '关键时间节点在近期，需要把握时机。',
+                'family_harmony': '家庭关系将更加和睦，沟通是关键。',
+                'children_luck': '子女运势良好，学业事业都有发展。',
+                'parent_health': '父母健康状况稳定，注意保养。',
+                'property_matters': '房产事务进展顺利，适合处理相关事宜。'
+            };
+            
+            Object.entries(predictions).forEach(([key, value]) => {
+                if (key !== 'title' && typeof value === 'string') {
+                    const content = predictionContent[key] || '基于您的具体情况，系统已生成个性化预测。';
+                    html += `
+                        <div class="prediction-item mb-2 p-2 border-start border-primary border-3">
+                            <strong>${value}</strong>
+                            <div class="text-success small">${content}</div>
+                        </div>
+                    `;
+                }
+            });
+            
+            return html;
+        }
+        
+        function formatActionableAdvice(targetedAnalysis) {
+            if (!targetedAnalysis || !targetedAnalysis.targeted_analysis || !targetedAnalysis.targeted_analysis.actionable_advice) {
+                return '<p class="text-muted">正在生成行动建议...</p>';
+            }
+            
+            const advice = targetedAnalysis.targeted_analysis.actionable_advice;
+            let html = `<h6 class="text-primary">${advice.title || '行动建议'}</h6>`;
+            
+            // 生成具体的建议内容
+            const adviceContent = {
+                'life_strategy': '建议制定长期发展规划，注重能力提升，建立良好的人际关系网络。',
+                'opportunity_methods': '保持敏锐的观察力，主动寻找机会，做好充分准备。',
+                'risk_prevention': '避免冲动决策，保持理性思考，建立风险预警机制。',
+                'timing_guidance': '选择有利时机行动，避免在不利时期做重要决定。',
+                'opportunity_seizing': '主动把握机会，做好充分准备，果断行动。',
+                'risk_management': '建立风险预警机制，制定应急预案，保持谨慎态度。',
+                'strategy_planning': '制定详细的策略计划，分步骤实施，确保成功。',
+                'evidence_collection': '系统收集相关证据，建立完整的证据链。',
+                'lawyer_selection': '选择经验丰富的律师，确保法律权益得到保护。',
+                'negotiation_tactics': '掌握谈判技巧，保持理性冷静，争取最佳结果。',
+                'relationship_improvement': '加强沟通交流，理解包容，维护家庭和谐。',
+                'child_education': '关注子女成长，因材施教，培养良好品格。',
+                'elder_care': '关心长辈健康，定期体检，提供精神慰藉。',
+                'home_environment': '优化家居环境，营造温馨氛围，促进家庭和睦。'
+            };
+            
+            Object.entries(advice).forEach(([key, value]) => {
+                if (key !== 'title' && typeof value === 'string') {
+                    const content = adviceContent[key] || '基于您的具体情况，系统已生成个性化建议。';
+                    html += `
+                        <div class="advice-item mb-2 p-2 bg-success bg-opacity-10 rounded border-start border-success border-3">
+                            <strong class="text-success">${value}</strong>
+                            <div class="text-info small">${content}</div>
+                        </div>
+                    `;
+                }
+            });
+            
+            return html;
+        }
+        
+        function formatConfidenceIndicator(eventAnalysis) {
+            const confidence = eventAnalysis.confidence * 100;
+            const level = confidence > 70 ? '高' : confidence > 40 ? '中' : '低';
+            const color = confidence > 70 ? 'success' : confidence > 40 ? 'warning' : 'danger';
+            
+            return `
+                <div class="confidence-indicator">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>分析准确度</span>
+                        <span class="badge bg-${color}">${level}置信度</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-${color}" style="width: ${confidence}%"></div>
+                    </div>
+                    <div class="mt-2 small text-muted">
+                        置信度 ${confidence.toFixed(1)}% - 
+                        ${confidence > 70 ? '系统对您的问题识别非常准确，分析结果高度可信' : 
+                          confidence > 40 ? '系统基本识别了您的问题类型，分析结果较为可信' : 
+                          '建议您提供更详细的问题描述以获得更精准的分析'}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 快速问题设置函数
+        function setQuickQuestion(category) {
+            const questionTemplates = {
+                '工作': '我的工作发展如何？什么时候能升职加薪？',
+                '感情': '我的感情运势如何？什么时候能找到合适的对象？',
+                '财运': '我的财运如何？适合投资吗？',
+                '健康': '我的健康状况怎么样？需要注意什么？',
+                '学业': '我的学业运势如何？考试能否顺利通过？',
+                '出行': '我这次出行是否顺利？需要注意什么？',
+                '家庭': '我的家庭关系如何？子女运势怎么样？',
+                '综合': '请分析我的整体运势和发展趋势。',
+                '升职': '我什么时候能升职加薪？升职的机会大吗？',
+                '跳槽': '我适合跳槽吗？什么时候跳槽比较好？',
+                '创业': '我适合创业吗？创业的风险和机会如何？',
+                '投资': '我适合投资什么？投资的风险如何？',
+                '恋爱': '我的桃花运如何？什么时候能脱单？',
+                '结婚': '我什么时候能结婚？结婚对象怎么样？',
+                '官司': '我的官司能赢吗？什么时候能结案？',
+                '房产': '我适合买房吗？房价走势如何？',
+                '高考': '我的高考成绩如何？能考上理想的大学吗？',
+                '证书': '我的证书考试能通过吗？什么时候能拿到证书？',
+                '公务员': '我能考上公务员吗？面试能通过吗？',
+                '人际关系': '我的人际关系如何？如何改善人际关系？'
+            };
+            
+            const questionText = questionTemplates[category] || '';
+            document.getElementById('userQuestion').value = questionText;
+            
+            // 高亮选中的按钮
+            document.querySelectorAll('.btn-group button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // 设置当前时间函数
+        function setCurrentTime() {
+            const now = new Date();
+            document.getElementById('year').value = now.getFullYear();
+            document.getElementById('month').value = now.getMonth() + 1;
+            document.getElementById('day').value = now.getDate();
+            document.getElementById('hour').value = now.getHours();
+            document.getElementById('minute').value = now.getMinutes();
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置默认时间为当前时间
+            setCurrentTime();
+        });
+    </script>
+</body>
+</html>
